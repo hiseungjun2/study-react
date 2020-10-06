@@ -1,0 +1,8 @@
+1. git 설치
+C:\Program Files\Git
+
+2. node.js LTS 버전 설치
+C:\Program Files\nodejs
+
+3. yarn install 실행
+해당 프로젝트 안에서 (git에는 node_module이 빠져있음)

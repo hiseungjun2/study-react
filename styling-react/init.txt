@@ -1,0 +1,7 @@
+개발환경 세팅 시, yarn install 외에 yarn add node-sass 실행 추가 (sass 파일을 css 로 변환)
+
+yarn add node-sass
+yarn eject
+yarn add open-color include-media
+yarn add classnames
+yarn add styled-components

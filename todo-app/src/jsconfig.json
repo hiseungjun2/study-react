@@ -1,0 +1,6 @@
+/* 자동으로 import 하기 위한 설정 파일 */
+{
+    "compilerOptions": {
+        "target": "es6"
+    }
+}
