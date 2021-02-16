@@ -56,23 +56,46 @@ module.exports = {
                     // CSS 를 위한 처리
                     {
                         test : cssRegex,
-                        exclude : cssModuleRegex,
-                        // exportOnlyLocals : true 옵션을 설정해야 실제 CSS 파일을 생성하지 않는다.
-                        loader : require.resolve('css-loader'),
-                        options : {
-                            onlyLocals : true
+                        exclude : cssModuleRegex, 
+                        loader : require.resolve('css-loader'), 
+                        options : { 
+                            modules : { 
+                                exportOnlyLocals : true
+                            },
                         }
                     },
                     // CSS Module 을 위한 처리
                     {
-                        test : cssModuleRegex,
+                        test : cssModuleRegex, 
                         loader : require.resolve('css-loader'),
-                        options : {
-                            modules : true,
-                            onlyLocals : true,
+                        options : { 
+                            modules : { 
+                                exportOnlyLocals : true
+                            },
                             getLocalIdent : getCSSModuleLocalIdent
                         }
                     },
+                    // 오류로 인한 변경 - onlyLocals 를 찾을 수 없는 오류
+                    // // CSS 를 위한 처리
+                    // {
+                    //     test : cssRegex,
+                    //     exclude : cssModuleRegex,
+                    //     // exportOnlyLocals : true 옵션을 설정해야 실제 CSS 파일을 생성하지 않는다.
+                    //     loader : require.resolve('css-loader'),
+                    //     options : {
+                    //         onlyLocals : true
+                    //     }
+                    // },
+                    // // CSS Module 을 위한 처리
+                    // {
+                    //     test : cssModuleRegex,
+                    //     loader : require.resolve('css-loader'),
+                    //     options : {
+                    //         modules : true,
+                    //         onlyLocals : true,
+                    //         getLocalIdent : getCSSModuleLocalIdent
+                    //     }
+                    // },
                     // Sass 를 위한 처리
                     {
                         test : sassRegex,
