@@ -150,10 +150,14 @@ module.exports = {
             }
         ]
     },
-    resolve : {
-        modules : ['node_modules']
+    resolve: {
+        modules: ['node_modules'],
     },
-    externals : [nodeExternals()],
+    externals: [
+        nodeExternals({
+            allowlist: [/@babel/],
+        }),
+    ],
     plugins : [
         new webpack.DefinePlugin(env.stringified)   // 환경변수를 주입
     ]
