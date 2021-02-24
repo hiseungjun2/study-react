@@ -10,6 +10,7 @@ import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
 // DB 연결
 import mongoose from 'mongoose';
+import jstMiddleware from './lib/jwtMiddleware';
 
 import api from './api';
 // // 가짜 데이터
@@ -54,6 +55,7 @@ router.use('/api', api.routes());   // api 라우트 적용
 
 // 라우터 적용 전에 bodyParser 적용
 app.use(bodyParser());
+app.use(jstMiddleware);
 
 // app 인스턴스에 라우터 적용
 app.use(router.routes()).use(router.allowedMethods());

@@ -101,10 +101,23 @@ export const login = async ctx => {
     }
 };
 
+/*
+    GET /api/auth/check
+*/
 export const check = async ctx => {
-
+    const { user } = ctx.state;
+    if (!user) {
+        // 로그인중이 아님
+        ctx.status = 401;   // Unauthorized
+        return;
+    }
+    ctx.body = user;
 }
 
+/*
+    POST /api/auth/logout
+*/
 export const logout = async ctx => {
-
+    ctx.cookies.set('access_token');
+    ctx.status = 204;   // No Content
 }
