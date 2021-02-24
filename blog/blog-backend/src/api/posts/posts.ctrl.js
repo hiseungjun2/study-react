@@ -6,10 +6,35 @@ import Joi from '@hapi/joi';
 
 const { ObjectId } = mongoose.Types;
 
-export const checkObjectId = (ctx, next) => {
+// checkObjectId => getPostById 로 변경하고
+// 해당 미들웨어에서 id 로 포스트를 찾은 후 ctx.state 에 담음
+export const getPostById = async (ctx, next) => {
     const { id } = ctx.params;
     if (!ObjectId.isValid(id)) {
         ctx.status = 400;   // Bad Request
+        return;
+    }
+    try {
+        const post = await Post.findById(id);
+        // 포스트가 존재하지 않을 때
+        if (!post) {
+            ctx.status = 404;   // Not Found
+            return;
+        }
+        ctx.state.post = post;
+        return next();
+    } catch (e) {
+        ctx.throw(500, e);
+    }
+}
+
+// id 로 찾은 포스트가 로그인 중인 사용자의 포스트가 아닌 경우
+// 403 에러
+export const checkOwnPost = (ctx, next) => {
+    console.log(ctx.state);
+    const { user, post } = ctx.state;
+    if (post.user._id.toString() !== user._id) {
+        ctx.status = 403;   // Forbidden
         return;
     }
     return next();
@@ -46,6 +71,7 @@ export const write = async ctx => {
         title,
         body,
         tags,
+        user : ctx.state.user
     });
     try {
         await post.save();
@@ -92,17 +118,18 @@ export const list = async ctx => {
     GET /api/post/:id
 */
 export const read = async ctx => {
-    const { id } = ctx.params;
-    try {
-        const post = await Post.findById(id).exec();
-        if (!post) {
-            ctx.status = 404;   // Not Found
-            return;
-        }
-        ctx.body = post;
-    } catch (e) {
-        ctx.throw(500, e);
-    }
+    // const { id } = ctx.params;
+    // try {
+    //     const post = await Post.findById(id).exec();
+    //     if (!post) {
+    //         ctx.status = 404;   // Not Found
+    //         return;
+    //     }
+    //     ctx.body = post;
+    // } catch (e) {
+    //     ctx.throw(500, e);
+    // }
+    ctx.body = ctx.state.post;
 };
 
 /*

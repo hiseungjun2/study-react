@@ -35,7 +35,7 @@ UserSchema.methods.generateToken = function() {
     const token = jwt.sign(
         // 첫 번째 파라미터에는 토근 안에 집어놓고 싶은 데이터
         {
-            id : this.id,
+            _id : this.id,
             username : this.username
         },
         // 두 번째 파라미터에는 JWT 암호
