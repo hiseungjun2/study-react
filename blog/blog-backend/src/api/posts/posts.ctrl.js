@@ -82,7 +82,7 @@ export const write = async ctx => {
 };
 
 /*
-    GET /api/posts
+    GET /api/posts?username=&tag=$page=
 */
 export const list = async ctx => {
     // query 는 문자열이기 때문에 숫자로 변환해주어야 한다.
@@ -94,13 +94,20 @@ export const list = async ctx => {
         return;
     }
 
+    const { tag, username } = ctx.query;
+    // tag, username 값이 유효하면 객체 안에 넣고, 그렇지 않으면 넣지 않는다
+    const query = {
+        ...(username ? { 'user.username' : username } : {}),
+        ...(tag ? { tags : tag } : {})
+    }
+
     try {
         const posts = await Post.find()
                         .sort({ _id : -1 })     // id 필드를 내림차순(-1)
                         .limit(10)  // 10 개로 제한
                         .skip((page - 1) * 10)
                         .exec();
-        const postCount = await Post.countDocuments().exec();
+        const postCount = await Post.countDocuments(query).exec();
         ctx.set('Last-Page', Math.ceil(postCount / 10));
         // 200자 이상이면 ... 를 붙이고 자르기
         ctx.body = posts
