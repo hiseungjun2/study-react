@@ -16,8 +16,8 @@ const SubInfoBlock = styled.div`
     /* span 사이에 가운뎃점 문자 보여주기 */
     span + span:before {
         color : ${palette.gray[4]};
-        padding-left : 0.25rem,
-        padding-right : 0.25rem,
+        padding-left : 0.25rem; 
+        padding-right : 0.25rem;
         content : '\\B7';   /* 가운뎃점 문자 */
     }
 `;
