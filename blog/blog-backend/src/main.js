@@ -16,6 +16,10 @@ import api from './api';
 // // 가짜 데이터
 // import createFakeData from './createFakeData'
 
+import serve from 'koa-static';
+import path from 'path';
+import send from 'koa-send';
+
 // 비구조화 할당을 통해 process.env 내부 값에 대해 레퍼런스 만들기
 const { PORT, MONGO_URI } = process.env;
 
@@ -84,6 +88,16 @@ app.use(router.routes()).use(router.allowedMethods());
 // app.use(ctx => {
 //     ctx.body = 'hello World';
 // });
+
+const buildDirectory = path.resolve(__dirname, '../../blog-frontend/build');
+app.use(serve(buildDirectory));
+app.use(async ctx => {
+    // Not Found 이고 주소가 /api 로 시작하지 않는 경우
+    if (ctx.status === 404 && ctx.path.indexOf('/api') !== 0) {
+        // index.html 내용 반환
+        await send(ctx, 'index.html', { root : buildDirectory });
+    }
+});
 
 // PORT가 지정되어 있지 않다면 4000을 적용
 const port = PORT || 4000;
